@@ -1,1 +1,2 @@
-create database screencasts;
+create database projectDatabase;
+

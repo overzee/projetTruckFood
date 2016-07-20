@@ -39,15 +39,16 @@ public class FetchFoodTruckTask {
     
     private static final Logger log = LoggerFactory.getLogger(FetchFoodTruckTask.class);
     private static final String URL = "http://camionderue.com/donneesouvertes/geojson";
-    
-    @Scheduled(cron="*/2 * * * * ?")
+
+    @Scheduled(cron="*/120 * * * * ?")
     public void execute() throws IOException {
         System.out.println(URL);
         System.out.println(Arrays.asList(new RestTemplate().getForObject(URL, Features.class)).stream());
         //Features myObjects = mapper.readValue(URL,Features.class);
         Arrays.asList(new RestTemplate().getForObject(URL, Features.class)).stream()
                 .map(Features::toString)
-                .forEach(log::info);    
+                .forEach(log::info);
+        ;
     }
 }
 

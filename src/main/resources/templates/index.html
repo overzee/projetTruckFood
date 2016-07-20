@@ -1,26 +1,125 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-  <meta charset="UTF-8"/>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous" />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous" />
+  <meta charset='utf-8'/>
+  <title>Montreal's food truck position</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no'/>
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.20.0/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.20.0/mapbox-gl.css' rel='stylesheet'/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+        integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+        integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous"/>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #map {
+      position: absolute;
+      top: 20px;
+      bottom: 0;
+      width: 50%;
+      height: 100%
+    }
+
+    .omg {
+      position: absolute;
+      right: 10px;
+      width: 45%;
+    }
+
+    .table-container {
+      height: 250px !important;
+      overflow: scroll;
+    }
+
+    .rightBottom {
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+  </style>
 </head>
 <body>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-12">
-        <h1>Bonjour</h1>
-        <ul>
-          <li th:each="c: ${citations}">
-            <span th:text="${c.contenu}"></span>&nbsp;&mdash;<span th:text="${c.auteur}"></span>
-          </li>
-        </ul>
+
+<nav class="navbar navbar-default navbar-static-top">
+  <div class="container">
+    <div id="navbar" class="navbar-collapse collapse">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">FoodTruck</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/">Main page</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div id='map'></div>
+<script>
+  mapboxgl.accessToken = 'pk.eyJ1IjoiZXRocm95IiwiYSI6ImNpcGlybTFoejAxc2N0bG5qdnF0dGlhdmMifQ.RHRRzwl4iOS3X54tjJ3cTQ';
+  var map = new mapboxgl.Map({
+    container: 'map', // container id
+    style: 'mapbox://styles/mapbox/streets-v9', //stylesheet location
+    center: [-73.567948, 45.509562], // starting position
+    zoom: 9 // starting zoom
+  });
+</script>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-4 omg">
+
+      <h3>FoodTrucks</h3>
+
+
+      <div class="rightBottom">
+        <form id="form1" class="form-inline">
+          <div class="form-group">
+            <label for="startDate">From :</label>
+            <input pattern="[1-2]{1}[0-9]{3}-[0-9]{2}-[0-9]{2}" title="YYYY-MM-DD" type="text" class="form-control" id="startDate" placeholder="2016-11-01"/>
+          </div>
+          <div class="form-group">
+            <label for="endDate">To :</label>
+            <input pattern="[1-2]{1}[0-9]{3}-[0-9]{2}-[0-9]{2}" title="YYYY-MM-DD" type="text" class="form-control" id="endDate" placeholder="2016-12-01"/>
+          </div>
+
+          <button type="submit" class="btn btn-secondary">Send request</button>
+        </form>
+      </div>
+
+      <div class="table-container">
+
+        <table class="table table-responsive table-hover table-stripped">
+
+          <thead>
+          <tr>
+            <th>Truckid</th>
+            <th>Name</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+
+          <tbody th:each="c: ${lists}">
+          <tr>
+            <td th:text="${c.truckId}"></td>
+            <td th:text="${c.name}"></td>
+            <td th:text="${c.description}"></td>
+          </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
+</div>
 
-  <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-  <script src="js/main.js"></script>
+
+<script src="https://code.jquery.com/jquery-2.2.3.min.js"
+        integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+        crossorigin="anonymous"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
