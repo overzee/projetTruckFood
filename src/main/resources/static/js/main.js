@@ -42,16 +42,24 @@ function search () {
     // console.log(document.forms['searchForm']["startDate"].value);
     pattern = new RegExp(/(\d{4})[-\/](\d{2})[-\/](\d{2})/);
     //separer la date obtenu dans le textField avec exec. faire la verification manuellement....
+    var userStart = document.forms['searchForm']["startDate"].value;
+    var userEnd = document.forms['searchForm']["endDate"].value;
+    if (userStart !== "" && userEnd !== "" && validDates(userStart,userEnd)) {
 
-    if (document.forms['searchForm']["startDate"].value !== "" && document.forms['searchForm']["endDate"].value !== "") {
-
-        if (!pattern.test(document.forms['searchForm']["startDate"].value)) {
+        if (!isValidDate(userStart)  && !isValidDate(userEnd) && !validDates(userStart,userEnd)) {
             window.alert("failed");
         } else {
-            window.alert("passed! ");
-        }
+            $(document).ready(function() {
+                $.ajax({
+                    url: "http://localhost:8080/getTrucks?du="+userStart+"&au="+userEnd
+                }).then(function(data) {
+                    console.log("allo calvaire");
+                    // $('.greeting-id').append(data.id);
+                    // $('.greeting-content').append(data.content);
+                });
+            });        }
     } else {
-        window.alert("You have to fill the textbox with dates idiot -_- ")
+        window.alert("Be sure your dates are well formed and start is before end.")
     }
 }
 
@@ -63,4 +71,21 @@ function getTrucks(start,end){
     
 }
 
+function validDates(start,end){
+    var date1 = new Date(start);
+    var date2 = new Date(end);
+    console.log(date1 < date2);
+    if(date1 < date2){
+        return true;
+    }else{
+        return false;
+    }
+
+}
+
+
+function isValidDate(dateString) {
+    var regEx = /^\d{4}-\d{2}-\d{2}$/;
+    return dateString.match(regEx) != null;
+}
 
