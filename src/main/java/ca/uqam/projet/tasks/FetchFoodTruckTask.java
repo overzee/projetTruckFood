@@ -59,8 +59,9 @@ public class FetchFoodTruckTask {
     /* Must return a JSON format string */
     @RequestMapping("/getTrucks")
     public String getTrucks(@RequestParam(value="du")String start,@RequestParam(value="au")String end){
-        System.out.println("you called function with params : " + start + "  ||  " + end);
-        return "you called function with params : " + start + "  ||  " + end;
+        String value = "you called function with params : " + start + "  ||  " + end;
+        System.out.println(value);
+        return value;
     }
 }
 
