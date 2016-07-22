@@ -79,6 +79,10 @@ public class Features {
     public List<Feature> getFeatures() {
         return features;
     }
+    
+    public Feature getFeatureFromFeatures(List<Feature> features){
+        return features.get(0);
+    }
 
     /**
      * 

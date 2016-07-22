@@ -22,11 +22,18 @@ public class FoodtruckRepository {
 
     private static final String FIND_ALL_STMT =
             " select"
-                    + "     id"
-                    + "   , auteur"
-                    + "   , contenu"
+                    + "   ,name"
+                    + "   ,description"
+                    + "   ,fromdate"
+                    + "   ,heureDebut"
+                    + "   ,heureFin"
+                    + "   ,lieu"
+                    + "   ,camion"
+                    + "   ,truckId"
+                    + "   ,longitude"
+                    + "   ,latitude"
                     + " from"
-                    + "   citations"
+                    + "   foodTruck"
             ;
 
     public List<Citation> findAll() {
@@ -49,28 +56,47 @@ public class FoodtruckRepository {
     }
 
     private static final String INSERT_STMT =
-            " insert into citations (id, auteur, contenu)"
-                    + " values (?, ?, ?)"
+            " insert into foodTruck (id,name,description,fromdate,heureDebut," 
+                    + "heureFin,lieu,camion," 
+                    + "truckId,longitude,latitude)"
+                    + " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
                     + " on conflict do nothing"
-            ;
+    ;
 
-//    public int insert(Features features) {
-//        return jdbcTemplate.update(conn -> {
-//            PreparedStatement ps = conn.prepareStatement(INSERT_STMT);
-//            ps.setInt(1, citation.getId());
-//            ps.setString(2, citation.getAuteur());
-//            ps.setString(3, citation.getContenu());
-//            return ps;
-//        });
-//    }
+    public int insert(Features features) {
+        return jdbcTemplate.update(conn -> {
+            PreparedStatement ps = conn.prepareStatement(INSERT_STMT);
+            ps.setString(1, features.getFeatureFromFeatures(features.getFeatures()).
+                    getProperties().getName());
+            ps.setString(2, features.getFeatureFromFeatures(features.getFeatures()).
+                    getProperties().getDescription());
+            ps.setString(3, features.getFeatureFromFeatures(features.getFeatures()).
+                    getProperties().getDate());
+            ps.setString(4, features.getFeatureFromFeatures(features.getFeatures()).
+                    getProperties().getHeureDebut());
+            ps.setString(5, features.getFeatureFromFeatures(features.getFeatures()).
+                    getProperties().getHeureFin());
+            ps.setString(6, features.getFeatureFromFeatures(features.getFeatures()).
+                    getProperties().getLieu());
+            ps.setString(7, features.getFeatureFromFeatures(features.getFeatures()).
+                    getProperties().getCamion());
+            ps.setString(8, features.getFeatureFromFeatures(features.getFeatures()).
+                    getProperties().getTruckid());
+            ps.setString(9, features.getFeatureFromFeatures(features.getFeatures()).
+                    getGeometry().getLongitude());
+            ps.setString(10, features.getFeatureFromFeatures(features.getFeatures()).
+                    getGeometry().getLatitude());
+            return ps;
+        });
+    }
 }
 
-//class FoodTruckRowMapper implements RowMapper<Properties> {
-//    public Properties mapRow(ResultSet rs, int rowNum) throws SQLException {
-////        return new Properties(
-////                rs.getInt("id")
-////                , rs.getString("auteur")
-////                , rs.getString("contenu")
-////        );
-//    }
-//}
+/**class FoodTruckRowMapper implements RowMapper<Features> {
+    public Features mapRow(ResultSet rs, int rowNum) throws SQLException {
+        return new Features(
+                rs.getInt("id")
+                , rs.getString("auteur")
+                , rs.getString("contenu")
+        );
+    }
+}*/
