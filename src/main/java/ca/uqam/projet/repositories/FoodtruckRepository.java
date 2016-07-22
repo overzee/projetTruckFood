@@ -56,9 +56,10 @@ public class FoodtruckRepository {
     }
 
     private static final String INSERT_STMT =
-            " insert into foodTruck (id,name,description,fromdate,heureDebut," 
+            " insert into foodTruck (truckId, name,description,"
+                    + "fromdate,heureDebut," 
                     + "heureFin,lieu,camion," 
-                    + "truckId,longitude,latitude)"
+                    + "longitude,latitude)"
                     + " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
                     + " on conflict do nothing"
     ;

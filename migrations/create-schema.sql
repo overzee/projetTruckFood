@@ -1,5 +1,5 @@
 create table foodTruck (
-    id int primary key
+    truckId text primary key
   , name text
   , description text
   , fromdate date
@@ -7,13 +7,12 @@ create table foodTruck (
   , heureFin text
   , lieu text
   , camion text
-  , truckId text
   , longitude text
   , latitude text
 );
 
-insert into foodTruck(id,name,description,fromdate,heureDebut,heureFin,lieu,camion
-,truckId,longitude,latitude) values (1,'ethienne','je suis le meilleur','2016-12-08','10:00','20:00','Repentigny','mon camion','123091823nadf','45.755446','-73.481597');
+insert into foodTruck(truckId,name,description,fromdate,heureDebut,heureFin,lieu,camion
+,longitude,latitude) values ('123091823nadf','ethienne','je suis le meilleur','2016-12-08','10:00','20:00','Repentigny','mon camion','45.755446','-73.481597');
 
 create table bixi(
 	id int primary key
