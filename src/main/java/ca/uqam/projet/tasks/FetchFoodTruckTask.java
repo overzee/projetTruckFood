@@ -7,6 +7,10 @@ package ca.uqam.projet.tasks;
 
 import ca.uqam.projet.resources.*;
 
+import java.sql.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import ca.uqam.projet.resources.*;
@@ -21,6 +25,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.awt.Point;
 import java.io.IOException;
+
+import javafx.scene.input.DataFormat;
 import org.jsoup.*;
 import org.slf4j.*;
 
@@ -57,13 +63,44 @@ public class FetchFoodTruckTask {
 
 //    GET /horaires-camions?du=2016-05-08&au=2016-05-15
     /* Must return a JSON format string */
+    private final String host = "jdbc:postgresql:projectdatabase";
+    private final String username = "postgres";
+    private final String password = "postgres";
+    private final DateFormat format = new SimpleDateFormat("yyyy-mm-dd");
     @RequestMapping("/getTrucks")
     public String getTrucks(@RequestParam(value="du")String start,@RequestParam(value="au")String end){
+        ArrayList<Object> foodtrucks = new ArrayList<>();
         String value = "you called function with params : " + start + "  ||  " + end;
-        System.out.println(value);
+
+        java.sql.Connection conn = null;
+        try {
+            conn = DriverManager.getConnection( host, username, password );
+            Statement st = conn.createStatement();
+            String query = "SELECT * FROM foodtruck WHERE fromDate > '"+ start +"' AND fromDate <= '" + end + "'";
+            System.out.println(query);
+            ResultSet rs = st.executeQuery(query);
+            while (rs.next()){
+                System.out.println(rs.getString(2));//get description
+                //create truck list -> send to JSON -> return
+            }
+            rs.close();
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
         return value;
     }
 }
 
+
+//    List<Product> products = someProductService.list();
+//    String json = new Gson().toJson(products);
+//
+//response.setContentType("application/json");
+//        response.setCharacterEncoding("UTF-8");
+//        response.getWriter().write(json);
+//        }
 
 
