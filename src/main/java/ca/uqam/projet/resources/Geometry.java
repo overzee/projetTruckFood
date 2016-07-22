@@ -27,9 +27,7 @@ public class Geometry {
     private List<Double> coordinates = new ArrayList<Double>();
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-    
-    private String longitude;
-    private String latitude;
+
     /**
      * No args constructor for use in serialization
      * 
@@ -45,18 +43,8 @@ public class Geometry {
     public Geometry(String type, List<Double> coordinates) {
         this.type = type;
         this.coordinates = coordinates;
-        longitude = Double.toString(coordinates.get(0));
-        latitude = Double.toString(coordinates.get(1));
     }
-    
-    public String getLongitude() {
-        return longitude;
-    }
-    
-    public String getLatitude() {
-        return latitude;
-    }
-    
+
     /**
      * 
      * @return
@@ -76,8 +64,6 @@ public class Geometry {
     public void setType(String type) {
         this.type = type;
     }
-    
-    
 
     public Geometry withType(String type) {
         this.type = type;

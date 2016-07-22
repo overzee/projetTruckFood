@@ -79,10 +79,6 @@ public class Features {
     public List<Feature> getFeatures() {
         return features;
     }
-    
-    public Feature getFeatureFromFeatures (List<Feature> features){
-        return features.get(0);
-    }
 
     /**
      * 
@@ -100,11 +96,8 @@ public class Features {
     }
 
     @Override
-    public String toString() { 
-        for(Feature feature : features) {
-            System.out.println(feature.toString());
-        }
-        return null;
+    public String toString() {
+        return features.toString();
     }
 
     @JsonAnyGetter
@@ -121,4 +114,5 @@ public class Features {
         this.additionalProperties.put(name, value);
         return this;
     }
+
 }
