@@ -50,20 +50,20 @@ public class FetchFoodTruckTask {
     private static final Logger log = LoggerFactory.getLogger(FetchFoodTruckTask.class);
     private static final String URL = "http://camionderue.com/donneesouvertes/geojson";
 
-//    @Scheduled(cron="*/120 * * * * ?")
-//    public void execute() throws IOException {
-//        System.out.println(URL);
-//        System.out.println(Arrays.asList(new RestTemplate().getForObject(URL, Features.class)).stream());
-//        //Features myObjects = mapper.readValue(URL,Features.class);
-//        Arrays.asList(new RestTemplate().getForObject(URL, Features.class)).stream()
-//                .map(Features::toString)
-//                .forEach(log::info);
-//        ;
-//    }
+    @Autowired private FoodtruckRepository repository;
+    
+    @Scheduled(cron="*/120 * * * * ?")
+    public void execute() throws IOException {
+        Arrays.asList(new RestTemplate().getForObject(URL, Features.class)).stream()
+                .peek(c -> log.info(c.toString()))
+                .forEach(repository::insert)
+                ;
+        ;
+    }
 
 //    GET /horaires-camions?du=2016-05-08&au=2016-05-15
     /* Must return a JSON format string */
-    private final String host = "jdbc:postgresql:projectdatabase";
+    /**private final String host = "jdbc:postgresql:projectdatabase";
     private final String username = "postgres";
     private final String password = "postgres";
     private final DateFormat format = new SimpleDateFormat("yyyy-mm-dd");
@@ -91,7 +91,7 @@ public class FetchFoodTruckTask {
 
 
         return value;
-    }
+    }*/
 }
 
 

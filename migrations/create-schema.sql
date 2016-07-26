@@ -2,7 +2,7 @@ create table foodTruck (
     truckId text primary key
   , name text
   , description text
-  , fromdate date
+  , fromdate text
   , heureDebut text
   , heureFin text
   , lieu text
@@ -10,9 +10,6 @@ create table foodTruck (
   , longitude text
   , latitude text
 );
-
-insert into foodTruck(truckId,name,description,fromdate,heureDebut,heureFin,lieu,camion
-,longitude,latitude) values ('123091823nadf','ethienne','je suis le meilleur','2016-12-08','10:00','20:00','Repentigny','mon camion','45.755446','-73.481597');
 
 create table bixi(
 	id int primary key
