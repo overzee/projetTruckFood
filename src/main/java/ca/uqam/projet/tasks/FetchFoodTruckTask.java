@@ -27,6 +27,7 @@ import java.awt.Point;
 import java.io.IOException;
 
 import javafx.scene.input.DataFormat;
+import org.json.JSONArray;
 import org.jsoup.*;
 import org.slf4j.*;
 
