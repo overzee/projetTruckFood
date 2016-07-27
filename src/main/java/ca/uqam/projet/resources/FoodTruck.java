@@ -7,7 +7,12 @@ package ca.uqam.projet.resources;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,7 +24,7 @@ public class FoodTruck {
     
     private String name;
     private String description;
-    private String date;
+    private Date date;
     private String heureDebut;
     private String heureFin;
     private String lieu;
@@ -31,7 +36,7 @@ public class FoodTruck {
     public FoodTruck() {
     }
     
-    public FoodTruck(String name, String description, String date, String heureDebut, 
+    public FoodTruck(String name, String description, Date date, String heureDebut,
             String heureFin, String lieu, String camion, String truckid, String longitude,
             String latitude) {
         this.name = name;
@@ -63,15 +68,21 @@ public class FoodTruck {
     /**
      * @return the date
      */
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
     /**
      * @param date the date to set
      */
+    private static DateFormat parser = new SimpleDateFormat("yyyy-mm-dd");
     public void setDate(String date) {
-        this.date = date;
+
+        try {
+            this.date = parser.parse(date);
+        } catch (ParseException e) {
+            System.out.println("Exception while parsing date" + e.getMessage());
+        }
     }
 
     /**
