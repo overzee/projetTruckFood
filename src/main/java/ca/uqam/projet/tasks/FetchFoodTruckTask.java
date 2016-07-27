@@ -9,35 +9,28 @@ import ca.uqam.projet.resources.*;
 
 import java.sql.*;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import ca.uqam.projet.resources.*;
-import ca.uqam.projet.repositories.*;
+import org.json.JSONArray;
 
-import java.util.*;
-import java.util.stream.*;
-
-import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.awt.Point;
-import java.io.IOException;
-
-import javafx.scene.input.DataFormat;
-import org.jsoup.*;
+import org.json.JSONString;
 import org.slf4j.*;
 
-import org.springframework.beans.factory.annotation.*;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.*;
-import org.springframework.scheduling.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.*;
+import org.springframework.web.bind.annotation.RestController;;
 
+import static java.lang.System.out;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.core.Response;
 /**
  *
  * @author Richard Overzee
@@ -68,29 +61,42 @@ public class FetchFoodTruckTask {
     private final String password = "postgres";
     private final DateFormat format = new SimpleDateFormat("yyyy-mm-dd");
     @RequestMapping("/getTrucks")
-    public String getTrucks(@RequestParam(value="du")String start,@RequestParam(value="au")String end){
+    public String getTrucks(@RequestParam(value="du")String start, @RequestParam(value="au")String end) {
         ArrayList<Object> foodtrucks = new ArrayList<>();
-        String value = "you called function with params : " + start + "  ||  " + end;
-
         java.sql.Connection conn = null;
+        String value;
         try {
-            conn = DriverManager.getConnection( host, username, password );
+            conn = DriverManager.getConnection(host, username, password);
             Statement st = conn.createStatement();
-            String query = "SELECT * FROM foodtruck WHERE fromDate > '"+ start +"' AND fromDate <= '" + end + "'";
-            System.out.println(query);
+            String query = "SELECT * FROM foodtruck WHERE fromDate > '" + start + "' AND fromDate <= '" + end + "'";
+            out.println(query);
             ResultSet rs = st.executeQuery(query);
-            while (rs.next()){
-                System.out.println(rs.getString(2));//get description
-                //create truck list -> send to JSON -> return
+            while (rs.next()) {
+                foodtrucks.add(new FoodTruck(rs.getString(2), rs.getString(3), rs.getDate(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(1), rs.getString(9), rs.getString(10)));
             }
             rs.close();
             st.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            out.println("Error while executing query to database  :  " + e.getMessage());
         }
 
+        value = parseToJSON(foodtrucks);
+//        System.out.println(Response.ok(value).build().toString());
 
+//        return Response.status(200).entity(value).build();
+//        return Response.ok(value, String.valueOf(MediaType.APPLICATION_JSON)).build();
         return value;
+    }
+
+
+
+    private String parseToJSON(ArrayList<Object> foodtrucks) {
+        JSONArray trucksJSON = new JSONArray(foodtrucks);
+        String value = trucksJSON.toString(4);
+        if(foodtrucks.size()>0)
+            return value;
+        else return "No data matched your request.";
     }
 }
 
