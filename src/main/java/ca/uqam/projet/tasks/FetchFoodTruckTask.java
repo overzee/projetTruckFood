@@ -59,6 +59,8 @@ public class FetchFoodTruckTask {
                 .forEach(repository::insert)
                 ;
         ;
+        //for(int i = 0, ){
+        //}
     }
 
 //    GET /horaires-camions?du=2016-05-08&au=2016-05-15

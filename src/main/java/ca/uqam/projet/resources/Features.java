@@ -80,8 +80,12 @@ public class Features {
         return features;
     }
     
-    public Feature getFeatureFromFeatures(List<Feature> features){
-        return features.get(0);
+    public int sizeOfFeatures(){
+        return features.size();
+    }
+    
+    public Feature getFeatureFromFeatures(List<Feature> features, int index){
+        return features.get(index);
     }
 
     /**

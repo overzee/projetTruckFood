@@ -46,30 +46,36 @@ public class FoodtruckRepository {
     ;
 
     public int insert(Features features) {
-        return jdbcTemplate.update(conn -> {
-            PreparedStatement ps = conn.prepareStatement(INSERT_STMT);
-            ps.setString(1, features.getFeatureFromFeatures(features.getFeatures()).
-                    getProperties().getName());
-            ps.setString(2, features.getFeatureFromFeatures(features.getFeatures()).
-                    getProperties().getDescription());
-            ps.setString(3, features.getFeatureFromFeatures(features.getFeatures()).
-                    getProperties().getDate());
-            ps.setString(4, features.getFeatureFromFeatures(features.getFeatures()).
-                    getProperties().getHeureDebut());
-            ps.setString(5, features.getFeatureFromFeatures(features.getFeatures()).
-                    getProperties().getHeureFin());
-            ps.setString(6, features.getFeatureFromFeatures(features.getFeatures()).
-                    getProperties().getLieu());
-            ps.setString(7, features.getFeatureFromFeatures(features.getFeatures()).
-                    getProperties().getCamion());
-            ps.setString(8, features.getFeatureFromFeatures(features.getFeatures()).
-                    getProperties().getTruckid());
-            ps.setString(9, features.getFeatureFromFeatures(features.getFeatures()).
-                    getGeometry().getLongitude());
-            ps.setString(10, features.getFeatureFromFeatures(features.getFeatures()).
-                    getGeometry().getLatitude());
-            return ps;
-        });
+            return jdbcTemplate.update(conn -> {
+          
+                PreparedStatement ps = conn.prepareStatement(INSERT_STMT);
+                
+                for (int i = 0; i < features.sizeOfFeatures(); i++){
+                    System.out.println(features.getFeatureFromFeatures(features.getFeatures(), i).getProperties().getTruckid());
+                    ps.setString(1, features.getFeatureFromFeatures(features.getFeatures(), i).
+                            getProperties().getTruckid());
+                    ps.setString(2, features.getFeatureFromFeatures(features.getFeatures(), i).
+                            getProperties().getName());
+                    ps.setString(3, features.getFeatureFromFeatures(features.getFeatures(), i).
+                            getProperties().getDescription());
+                    ps.setString(4, features.getFeatureFromFeatures(features.getFeatures(), i).
+                            getProperties().getDate());
+                    ps.setString(5, features.getFeatureFromFeatures(features.getFeatures(), i).
+                            getProperties().getHeureDebut());
+                    ps.setString(6, features.getFeatureFromFeatures(features.getFeatures(), i).
+                            getProperties().getHeureFin());
+                    ps.setString(7, features.getFeatureFromFeatures(features.getFeatures(), i).
+                            getProperties().getLieu());
+                    ps.setString(8, features.getFeatureFromFeatures(features.getFeatures(), i).
+                            getProperties().getCamion());
+                    ps.setString(9, features.getFeatureFromFeatures(features.getFeatures(), i).
+                            getGeometry().getLongitude());
+                    ps.setString(10, features.getFeatureFromFeatures(features.getFeatures(), i).
+                            getGeometry().getLatitude());
+                    ps.executeUpdate();
+                }
+                return ps;
+            });
     }
 }
 
