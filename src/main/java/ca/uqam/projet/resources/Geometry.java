@@ -45,16 +45,14 @@ public class Geometry {
     public Geometry(String type, List<Double> coordinates) {
         this.type = type;
         this.coordinates = coordinates;
-        longitude = Double.toString(coordinates.get(0));
-        latitude = Double.toString(coordinates.get(1));
     }
     
-    public String getLongitude() {
-        return longitude;
+    public String getLongitude(List<Double> coordinates) {
+        return longitude = Double.toString(coordinates.get(0));
     }
     
-    public String getLatitude() {
-        return latitude;
+    public String getLatitude(List<Double> coordinatess) {
+        return latitude = Double.toString(coordinates.get(1));
     }
     
     /**

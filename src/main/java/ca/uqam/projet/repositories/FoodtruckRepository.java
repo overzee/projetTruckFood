@@ -46,12 +46,9 @@ public class FoodtruckRepository {
     ;
 
     public int insert(Features features) {
-            return jdbcTemplate.update(conn -> {
-          
-                PreparedStatement ps = conn.prepareStatement(INSERT_STMT);
-                
+            return jdbcTemplate.update(conn -> {     
+                PreparedStatement ps = conn.prepareStatement(INSERT_STMT);            
                 for (int i = 0; i < features.sizeOfFeatures(); i++){
-                    System.out.println(features.getFeatureFromFeatures(features.getFeatures(), i).getProperties().getTruckid());
                     ps.setString(1, features.getFeatureFromFeatures(features.getFeatures(), i).
                             getProperties().getTruckid());
                     ps.setString(2, features.getFeatureFromFeatures(features.getFeatures(), i).
@@ -69,9 +66,11 @@ public class FoodtruckRepository {
                     ps.setString(8, features.getFeatureFromFeatures(features.getFeatures(), i).
                             getProperties().getCamion());
                     ps.setString(9, features.getFeatureFromFeatures(features.getFeatures(), i).
-                            getGeometry().getLongitude());
+                            getGeometry().getLongitude(features.getFeatureFromFeatures(features.getFeatures(), i).
+                            getGeometry().getCoordinates()));
                     ps.setString(10, features.getFeatureFromFeatures(features.getFeatures(), i).
-                            getGeometry().getLatitude());
+                            getGeometry().getLatitude(features.getFeatureFromFeatures(features.getFeatures(), i).
+                            getGeometry().getCoordinates()));
                     ps.executeUpdate();
                 }
                 return ps;
