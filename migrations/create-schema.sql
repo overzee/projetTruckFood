@@ -28,3 +28,33 @@ create table bixi(
 	, nbEmptyDocks int
 	, lastUpdateTime int
 );
+
+create table arceau(
+	inv_id int primary key
+	, inv_no text
+	, anc_num int
+	, inv_catl_no int
+	, catl_modele text
+	, marq text
+	, date_inspection date
+	, ce_no  int
+	, element text
+	, categorie text
+	, couleur text
+	, materiau text
+	, condition text
+	, intervention text
+	, empl_x text
+	, empl_y text
+	, empl_z text
+	, territoire text
+	, statut text
+	, base text
+	, ancrage text
+	, parc text
+	, aire text
+	, empl_id int
+	, ordre_affichage int
+	, long text
+	, lat text
+);
