@@ -1,5 +1,5 @@
 create table foodTruck (
-    truckId text primary key
+    truckId text
   , name text
   , description text
   , fromdate text
@@ -9,6 +9,7 @@ create table foodTruck (
   , camion text
   , longitude text
   , latitude text
+  , PRIMARY KEY (truckId, longitude, latitude)
 );
 
 create table bixi(
