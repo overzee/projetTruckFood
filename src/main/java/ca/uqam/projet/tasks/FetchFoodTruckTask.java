@@ -9,19 +9,34 @@ import ca.uqam.projet.resources.*;
 
 import java.sql.*;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import org.json.JSONArray;
+import ca.uqam.projet.resources.*;
+import ca.uqam.projet.repositories.*;
 
-import org.json.JSONString;
+import java.util.*;
+import java.util.stream.*;
+
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.awt.Point;
+import java.io.IOException;
+
+import javafx.scene.input.DataFormat;
+import org.jsoup.*;
 import org.slf4j.*;
 
-import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
+import org.springframework.scheduling.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.*;
 
 import static java.lang.System.out;
 import javax.ws.rs.GET;
@@ -43,16 +58,18 @@ public class FetchFoodTruckTask {
     private static final Logger log = LoggerFactory.getLogger(FetchFoodTruckTask.class);
     private static final String URL = "http://camionderue.com/donneesouvertes/geojson";
 
-//    @Scheduled(cron="*/120 * * * * ?")
-//    public void execute() throws IOException {
-//        System.out.println(URL);
-//        System.out.println(Arrays.asList(new RestTemplate().getForObject(URL, Features.class)).stream());
-//        //Features myObjects = mapper.readValue(URL,Features.class);
-//        Arrays.asList(new RestTemplate().getForObject(URL, Features.class)).stream()
-//                .map(Features::toString)
-//                .forEach(log::info);
-//        ;
-//    }
+    @Autowired private FoodtruckRepository repository;
+
+    @Scheduled(cron="*/120 * * * * ?")
+    public void execute() throws IOException {
+        Arrays.asList(new RestTemplate().getForObject(URL, Features.class)).stream()
+                .peek(c -> log.info(c.toString()))
+                .forEach(repository::insert)
+                ;
+        ;
+        //for(int i = 0, ){
+        //}
+    }
 
 //    GET /horaires-camions?du=2016-05-08&au=2016-05-15
     /* Must return a JSON format string */
@@ -61,12 +78,12 @@ public class FetchFoodTruckTask {
     private final String password = "postgres";
     private final DateFormat format = new SimpleDateFormat("yyyy-mm-dd");
     @RequestMapping("/getTrucks")
-    public String getTrucks(@RequestParam(value="du")String start, @RequestParam(value="au")String end) {
+    public String getTrucks(@RequestParam(value="du")String start,@RequestParam(value="au")String end){
         ArrayList<Object> foodtrucks = new ArrayList<>();
         java.sql.Connection conn = null;
         String value;
         try {
-            conn = DriverManager.getConnection(host, username, password);
+            conn = DriverManager.getConnection( host, username, password );
             Statement st = conn.createStatement();
             String query = "SELECT * FROM foodtruck WHERE fromDate > '" + start + "' AND fromDate <= '" + end + "'";
             out.println(query);
@@ -77,15 +94,12 @@ public class FetchFoodTruckTask {
             rs.close();
             st.close();
         } catch (SQLException e) {
-//            e.printStackTrace();
-            out.println("Error while executing query to database  :  " + e.getMessage());
+            e.printStackTrace();
         }
 
         value = parseToJSON(foodtrucks);
 //        System.out.println(Response.ok(value).build().toString());
 
-//        return Response.status(200).entity(value).build();
-//        return Response.ok(value, String.valueOf(MediaType.APPLICATION_JSON)).build();
         return value;
     }
 

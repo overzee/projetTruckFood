@@ -19,7 +19,6 @@ import java.util.List;
  *
  * @author Phoenix
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class FoodTruck {
     
     private String name;
