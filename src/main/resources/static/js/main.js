@@ -1,24 +1,22 @@
+var map;
 function displayMap() {
     // .accessToken = 'pk.eyJ1IjoiZXRocm95IiwiYSI6ImNpcGlybTFoejAxc2N0bG5qdnF0dGlhdmMifQ.RHRRzwl4iOS3X54tjJ3cTQ';
     L.accessToken = 'pk.eyJ1IjoiZXRocm95IiwiYSI6ImNpcGlybTFoejAxc2N0bG5qdnF0dGlhdmMifQ.RHRRzwl4iOS3X54tjJ3cTQ';
-    var map = L.map('map').setView([45.509562, -73.567948], 9);
+    map = L.map('map').setView([45.509562, -73.567948], 9);
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {}).addTo(map);
     map.invalidateSize();
-    displayPinPoint(map);
 }
 
-function displayPinPoint(_map) {
-    var markerLocation = new L.LatLng(45.509562, -73.567948);
+function displayMarkerOnMap(header,ondate, arr,depart,lat,long) {
+    var markerLocation = new L.LatLng(lat, long);
     var marker = new L.Marker(markerLocation);
-    _map.addLayer(marker);
+    map.addLayer(marker);
     var popup = L.popup()
-    .setContent("<b>Hello world!</b><br>I am a popup. What if i'm adding a lot of text ? <br> Is it going to be a little ugly ?");
-
+    .setContent("<h3>"+header+"</h3> On date: " + ondate +"<br>Arrival time: " + arr + "<br>Departure time:" + depart);
     marker.bindPopup(popup).openPopup();
 }
 
 function search() {
-    console.log("je suis dans le search");
     pattern = new RegExp(/(\d{4})[-\/](\d{2})[-\/](\d{2})/);
     var userStart = document.forms['searchForm']["startDate"].value;
     var userEnd = document.forms['searchForm']["endDate"].value;
@@ -27,7 +25,6 @@ function search() {
             window.alert("failed");
         } else {
             // req.open('GET', "http://localhost:8080/getTrucks?du=" + userStart + "&au=" + userEnd, false); 
-            console.log('Je suis dans le else');
             var url = "http://localhost:8080/getTrucks?du=" + userStart + "&au=" + userEnd;
             var representationOfDesiredState = "The cheese is old and moldy, where is the bathroom?";
 
@@ -39,15 +36,46 @@ function search() {
 
             client.send(representationOfDesiredState);
 
-            if (client.status == 200)
-                alert("The request succeeded!\n\nThe response representation was:\n\n" + client.responseText)
-            else
+            if (client.status == 200){
+                // alert("The request succeeded!\n\nThe response representation was:\n\n" + client.responseText)
+                doSomethingWithData(client.responseText);
+            }
+            else{
                 alert("The request did not succeed!\n\nThe response status was: " + client.status + " " + client.statusText + ".");
+            }
         }
 
     } else {
         window.alert("Be sure your dates are well formed and start is before end.")
     }
+
+    return false;
+}
+
+/* 
+    Function that translate json to object
+*/
+function doSomethingWithData(json){
+    var truckList = JSON.parse(json);
+    var table = document.getElementById('truckTable');
+    truckList.forEach(function(entry){
+        var row = table.insertRow(table.rows.length);
+        var camionCell = row.insertCell(0);
+        var truckIdCell = row.insertCell(1);
+        var lieuCell = row.insertCell(2);
+        camionCell.innerHTML = entry.camion;
+        truckIdCell.innerHTML = entry.truckid;
+        lieuCell.innerHTML = entry.lieu;
+        
+        // for each truck, we want a marker on map
+        displayMarkerOnMap(entry.camion,entry.date, entry.heureDebut,entry.heureFin ,entry.latitude,entry.longitude)
+
+        return false;
+    });
+
+
+
+    return false;
 }
 
 
@@ -61,31 +89,6 @@ function validDates(start, end) {
     }
 
 }
-
-var getJSON = function(url, successHandler, errorHandler) {
-    var xhr = typeof XMLHttpRequest != 'undefined'
-    ? new XMLHttpRequest()
-    : new ActiveXObject('Microsoft.XMLHTTP');
-    xhr.open('get', url, true);
-    xhr.onreadystatechange = function() {
-        var status;
-        var data;
-        // https://xhr.spec.whatwg.org/#dom-xmlhttprequest-readystate
-        if (xhr.readyState == 4) { // `DONE`
-            status = xhr.status;
-            if (status == 200) {
-                data = JSON.parse(xhr.responseText);
-                successHandler && successHandler(data);
-            } else {
-                errorHandler && errorHandler(status);
-            }
-        }
-    };
-    xhr.send();
-};
-
-
-
 
 function isValidDate(dateString) {
     var regEx = /^\d{4}-\d{2}-\d{2}$/;

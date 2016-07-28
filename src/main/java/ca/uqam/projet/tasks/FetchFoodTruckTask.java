@@ -64,12 +64,9 @@ public class FetchFoodTruckTask {
     @Scheduled(cron="*/120 * * * * ?")
     public void execute() throws IOException {
         Arrays.asList(new RestTemplate().getForObject(URL, Features.class)).stream()
-                .peek(c -> log.info(c.toString()))
                 .forEach(repository::insert)
                 ;
         ;
-        //for(int i = 0, ){
-        //}
     }
 
 //    GET /horaires-camions?du=2016-05-08&au=2016-05-15
