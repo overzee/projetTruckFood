@@ -1,22 +1,37 @@
 package ca.uqam.projet.resources;
 
+import java.util.List;
+
+
 public class Bixi
 {
-    private Station station;
+    private List<Station> stations;
 
-    public Station getStation ()
+    public List<Station> getStations ()
     {
-        return station;
+        return stations;
     }
 
-    public void setStation (Station station)
+    public void setStation (List<Station> stations)
     {
-        this.station = station;
+        this.stations = stations;
+    }
+    
+    public void addStation(Station station){
+        stations.add(station);
+    }
+    
+    public Station getStationFromStations(List<Station> stations, int index){
+        return stations.get(index);
+    }
+    
+    public int sizeOfStations(){
+        return stations.size();
     }
 
     @Override
     public String toString()
     {
-        return "ClassPojo [station = "+station+"]";
+        return "ClassPojo [station = "+stations+"]";
     }
 }

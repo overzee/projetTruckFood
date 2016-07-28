@@ -181,6 +181,10 @@ public class Station
     {
         this.longi = longi;
     }
+    
+    public void sizeOfStation(){
+    
+    }
 
     @Override
     public String toString()

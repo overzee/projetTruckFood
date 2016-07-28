@@ -51,7 +51,7 @@ public class Geometry {
         return longitude = Double.toString(coordinates.get(0));
     }
     
-    public String getLatitude(List<Double> coordinatess) {
+    public String getLatitude(List<Double> coordinates) {
         return latitude = Double.toString(coordinates.get(1));
     }
     

@@ -61,12 +61,12 @@ public class FetchFoodTruckTask {
 
     @Autowired private FoodtruckRepository repository;
 
-    @Scheduled(cron="*/120 * * * * ?")
+    @Scheduled(cron="0 0,12 * * * *")
     public void execute() throws IOException {
         Arrays.asList(new RestTemplate().getForObject(URL, Features.class)).stream()
+                .peek(c -> log.info(c.toString()))
                 .forEach(repository::insert)
                 ;
-        ;
     }
 
 //    GET /horaires-camions?du=2016-05-08&au=2016-05-15

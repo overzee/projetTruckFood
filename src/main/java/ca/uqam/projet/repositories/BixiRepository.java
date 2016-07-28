@@ -38,7 +38,7 @@ public class BixiRepository {
                     + "   ,nbEmptyDocks"
                     + "   ,lastUpdateTime"
                     + " from"
-                    + "   foodTruck"
+                    + "   bixi"
             ;
 
     private static final String INSERT_STMT =
@@ -52,43 +52,24 @@ public class BixiRepository {
                     + " on conflict do nothing"
     ;
 
-    public int insert(Station station) {
-            return jdbcTemplate.update(conn -> {     
-                PreparedStatement ps = conn.prepareStatement(INSERT_STMT);            
-                for (int i = 0; i < station.sizeOfstation(); i++){
-                    ps.setString(1, station.getFeatureFromstation(station.getstation(), i).
-                            getProperties().getId());
-                    ps.setString(2, station.getFeatureFromstation(station.getstation(), i).
-                            getProperties().getName());
-                    ps.setString(3, station.getFeatureFromstation(station.getstation(), i).
-                            getProperties().getTerminalName());
-                    ps.setString(4, station.getFeatureFromstation(station.getstation(), i).
-                            getProperties().getLastCommitWithServer());
-                    ps.setString(9, station.getFeatureFromstation(station.getstation(), i).
-                            getGeometry().getLongitude(station.getFeatureFromstation(station.getstation(), i).
-                            getGeometry().getCoordinates()));
-                    ps.setString(10, station.getFeatureFromstation(station.getstation(), i).
-                            getGeometry().getLatitude(station.getFeatureFromstation(station.getstation(), i).
-                            getGeometry().getCoordinates()));
-                    ps.setString(5, station.getFeatureFromstation(station.getstation(), i).
-                            getProperties().getInstalled());
-                    ps.setString(6, station.getFeatureFromstation(station.getstation(), i).
-                            getProperties().getLocked());
-                    ps.setString(7, station.getFeatureFromstation(station.getstation(), i).
-                            getProperties().getInstallDate());
-                    ps.setString(8, station.getFeatureFromstation(station.getstation(), i).
-                            getProperties().getRemovalDate());
-                    ps.setString(8, station.getFeatureFromstation(station.getstation(), i).
-                            getProperties().getTemporary());
-                    ps.setString(8, station.getFeatureFromstation(station.getstation(), i).
-                            getProperties().getPublic());
-                    ps.setString(8, station.getFeatureFromstation(station.getstation(), i).
-                            getProperties().getNbBikes());
-                    ps.setString(8, station.getFeatureFromstation(station.getstation(), i).
-                            getProperties().getNbEmptyDocks());
-                    ps.setString(8, station.getFeatureFromstation(station.getstation(), i).
-                            getProperties().getLastUpdateTime());
-                    
+    public int insert(Bixi bixi) {
+            return jdbcTemplate.update(conn -> {
+                PreparedStatement ps = conn.prepareStatement(INSERT_STMT);
+                for(int i = 0; i < bixi.sizeOfStations(); i++){
+                    ps.setString(1, bixi.getStationFromStations(bixi.getStations(), i).getId());
+                    ps.setString(2, bixi.getStationFromStations(bixi.getStations(), i).getName());
+                    ps.setString(3, bixi.getStationFromStations(bixi.getStations(), i).getTerminalName());
+                    ps.setString(4, bixi.getStationFromStations(bixi.getStations(), i).getLastCommWithServer());
+                    ps.setString(5, bixi.getStationFromStations(bixi.getStations(), i).getLongi());
+                    ps.setString(6, bixi.getStationFromStations(bixi.getStations(), i).getLat());
+                    ps.setString(7, bixi.getStationFromStations(bixi.getStations(), i).getInstalled());
+                    ps.setString(8, bixi.getStationFromStations(bixi.getStations(), i).getInstallDate());
+                    ps.setString(9, bixi.getStationFromStations(bixi.getStations(), i).getRemovalDate());
+                    ps.setString(10, bixi.getStationFromStations(bixi.getStations(), i).getTemporary());
+                    ps.setString(11, bixi.getStationFromStations(bixi.getStations(), i).getPublicxml());
+                    ps.setString(12, bixi.getStationFromStations(bixi.getStations(), i).getNbBikes());
+                    ps.setString(13, bixi.getStationFromStations(bixi.getStations(), i).getNbEmptyDocks());
+                    ps.setString(14, bixi.getStationFromStations(bixi.getStations(), i).getLastUpdateTime());
                     ps.executeUpdate();
                 }
                 return ps;
