@@ -95,3 +95,54 @@ function isValidDate(dateString) {
     return dateString.match(regEx) != null;
 }
 
+/*
+//***********************************************************************************************
+//B2 show bixi marker when click on foodtruck marker (onMarkerClick function added to food marker)
+//***********************************************************************************************
+function onMarkerClick(header,lati, longi, nomStation) {
+    var markerLocationBixi = new L.LatLng(lat, long);
+    var markerBixi = new L.Marker(markerLocationBixi);
+    var popupBixi = L.popup()
+    .setContent("<h3>"+header+"</h3> Latitude: " + lati +"<br>Longitude: " + longi + "<br>Nom de la station:" + nomStation);
+    markerBixi.bindPopup(popupBixi).openPopup();
+}
+
+function searchBixi(){
+	
+	// req.open('GET', "http://localhost:8080/getBixi?latitude=" + lati + "&longitude=" + longi, false); 
+            var url = "http://localhost:8080/getBixi?latitude=" + lati + "&longitude=" + longi;
+            
+            var client = new XMLHttpRequest();
+
+            client.open("GET", url, false);
+
+            client.setRequestHeader("Content-Type", "text/json");
+
+            client.send(representationOfDesiredState);
+
+            if (client.status == 200){
+                // alert("The request succeeded!\n\nThe response representation was:\n\n" + client.responseText)
+                doSomethingWithData(client.responseText);
+            }
+            else{
+                alert("The request did not succeed!\n\nThe response status was: " + client.status + " " + client.statusText + ".");
+            }
+}
+
+function doSomethingWithDataBixi(json){
+    var bixiList = JSON.parse(json);
+    var table = document.getElementById('bixiTable');
+    bixiList.forEach(function(entry){
+        var row = table.insertRow(table.rows.length);
+        var nameCell = row.insertCell(0);
+        var idCell = row.insertCell(1);
+        nameCell.innerHTML = entry.name;
+        idCell.innerHTML = entry.id;
+        
+        
+        // for each truck, we want a marker on map
+        onMarkerClick(entry.name, entry.latitude, entry.longitude, entry.name);
+
+        return false;
+    });
+    */
