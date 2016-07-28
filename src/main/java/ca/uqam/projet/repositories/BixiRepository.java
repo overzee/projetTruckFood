@@ -22,55 +22,73 @@ public class BixiRepository {
     
     private static final String FIND_ALL_STMT =
             " select"
+                    + "   ,id"
                     + "   ,name"
-                    + "   ,description"
-                    + "   ,fromdate"
-                    + "   ,heureDebut"
-                    + "   ,heureFin"
-                    + "   ,lieu"
-                    + "   ,camion"
-                    + "   ,truckId"
-                    + "   ,longitude"
+                    + "   ,terminalName"
+                    + "   ,lastCommWithServer"
                     + "   ,latitude"
+                    + "   ,longitude"
+                    + "   ,installed"
+                    + "   ,locked"
+                    + "   ,installDate"
+                    + "   ,removalDate"
+                    + "   ,temporary"
+                    + "   ,public"
+                    + "   ,nbBikes"
+                    + "   ,nbEmptyDocks"
+                    + "   ,lastUpdateTime"
                     + " from"
                     + "   foodTruck"
             ;
 
     private static final String INSERT_STMT =
-            " insert into foodTruck (truckId, name,description,"
-                    + "fromdate,heureDebut," 
-                    + "heureFin,lieu,camion," 
-                    + "longitude,latitude)"
-                    + " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            " insert into station(id, name,terminalName,"
+                    + "lastCommWithServer" 
+                    + "latitude,longitude,installed," 
+                    + "locked,installDate,removalDate"
+                    + "temporary,public)"
+                    + "nbBikes,nbEmptyDocks,lastUpdateTime)"
+                    + " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
                     + " on conflict do nothing"
     ;
 
-    public int insert(Features features) {
+    public int insert(Station station) {
             return jdbcTemplate.update(conn -> {     
                 PreparedStatement ps = conn.prepareStatement(INSERT_STMT);            
-                for (int i = 0; i < features.sizeOfFeatures(); i++){
-                    ps.setString(1, features.getFeatureFromFeatures(features.getFeatures(), i).
-                            getProperties().getTruckid());
-                    ps.setString(2, features.getFeatureFromFeatures(features.getFeatures(), i).
+                for (int i = 0; i < station.sizeOfstation(); i++){
+                    ps.setString(1, station.getFeatureFromstation(station.getstation(), i).
+                            getProperties().getId());
+                    ps.setString(2, station.getFeatureFromstation(station.getstation(), i).
                             getProperties().getName());
-                    ps.setString(3, features.getFeatureFromFeatures(features.getFeatures(), i).
-                            getProperties().getDescription());
-                    ps.setString(4, features.getFeatureFromFeatures(features.getFeatures(), i).
-                            getProperties().getDate());
-                    ps.setString(5, features.getFeatureFromFeatures(features.getFeatures(), i).
-                            getProperties().getHeureDebut());
-                    ps.setString(6, features.getFeatureFromFeatures(features.getFeatures(), i).
-                            getProperties().getHeureFin());
-                    ps.setString(7, features.getFeatureFromFeatures(features.getFeatures(), i).
-                            getProperties().getLieu());
-                    ps.setString(8, features.getFeatureFromFeatures(features.getFeatures(), i).
-                            getProperties().getCamion());
-                    ps.setString(9, features.getFeatureFromFeatures(features.getFeatures(), i).
-                            getGeometry().getLongitude(features.getFeatureFromFeatures(features.getFeatures(), i).
+                    ps.setString(3, station.getFeatureFromstation(station.getstation(), i).
+                            getProperties().getTerminalName());
+                    ps.setString(4, station.getFeatureFromstation(station.getstation(), i).
+                            getProperties().getLastCommitWithServer());
+                    ps.setString(9, station.getFeatureFromstation(station.getstation(), i).
+                            getGeometry().getLongitude(station.getFeatureFromstation(station.getstation(), i).
                             getGeometry().getCoordinates()));
-                    ps.setString(10, features.getFeatureFromFeatures(features.getFeatures(), i).
-                            getGeometry().getLatitude(features.getFeatureFromFeatures(features.getFeatures(), i).
+                    ps.setString(10, station.getFeatureFromstation(station.getstation(), i).
+                            getGeometry().getLatitude(station.getFeatureFromstation(station.getstation(), i).
                             getGeometry().getCoordinates()));
+                    ps.setString(5, station.getFeatureFromstation(station.getstation(), i).
+                            getProperties().getInstalled());
+                    ps.setString(6, station.getFeatureFromstation(station.getstation(), i).
+                            getProperties().getLocked());
+                    ps.setString(7, station.getFeatureFromstation(station.getstation(), i).
+                            getProperties().getInstallDate());
+                    ps.setString(8, station.getFeatureFromstation(station.getstation(), i).
+                            getProperties().getRemovalDate());
+                    ps.setString(8, station.getFeatureFromstation(station.getstation(), i).
+                            getProperties().getTemporary());
+                    ps.setString(8, station.getFeatureFromstation(station.getstation(), i).
+                            getProperties().getPublic());
+                    ps.setString(8, station.getFeatureFromstation(station.getstation(), i).
+                            getProperties().getNbBikes());
+                    ps.setString(8, station.getFeatureFromstation(station.getstation(), i).
+                            getProperties().getNbEmptyDocks());
+                    ps.setString(8, station.getFeatureFromstation(station.getstation(), i).
+                            getProperties().getLastUpdateTime());
+                    
                     ps.executeUpdate();
                 }
                 return ps;
@@ -78,12 +96,4 @@ public class BixiRepository {
     }
 }
 
-/**class FoodTruckRowMapper implements RowMapper<Features> {
-    public Features mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return new Features(
-                rs.getInt("id")
-                , rs.getString("auteur")
-                , rs.getString("contenu")
-        );
-    }
-}*/
+

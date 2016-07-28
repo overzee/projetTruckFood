@@ -52,33 +52,20 @@ public class FetchBixiTask {
     private static final Logger log = LoggerFactory.getLogger(FetchBixiTask.class);
     private static final String URL = "https://montreal.bixi.com/data/bikeStations.xml";
 
-    @Autowired private FoodtruckRepository repository;
+    @Autowired private BixiRepository repository;
     
-    @Scheduled(cron="* 10 * * * ?")
+    @Scheduled(cron="* 1 * * * ?")
     public void execute() throws IOException {
-        Arrays.asList(new RestTemplate().getForObject(URL, Features.class)).stream()
+        Arrays.asList(new RestTemplate().getForObject(URL, Bixi.class)).stream()
                 .peek(c -> log.info(c.toString()))
-                .forEach(repository::insert)
+                //.forEach(repository::insert)
                 ;
-        ;
+    }   
         
     }
 
 //    
-    private static XStream getXstreamObject() {
-    	XStream xstream = new XStream(); // DomDriver and StaxDriver instances also can be used with constructor
-    	return xstream;
-    }
-    
-}
+   
 
-
-//    List<Product> products = someProductService.list();
-//    String json = new Gson().toJson(products);
-//
-//response.setContentType("application/json");
-//        response.setCharacterEncoding("UTF-8");
-//        response.getWriter().write(json);
-//        }
 
 
